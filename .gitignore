@@ -1,0 +1,8 @@
+# Node
+/node_modules
+
+# Visual Studio Code
+.vscode/*
+
+# Settings folder con lo de BD
+/src/config
