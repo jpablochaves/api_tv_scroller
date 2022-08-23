@@ -37,11 +37,30 @@ const getRepeatedMessages = async (req, res) => {
     }
 };
 
-// Prueba de llamado a procedure
+// Obtener los proximos mensajes llamando a una stored function
 const getNextMessages = async (req, res) => {
     try {
         const rows = await internalService.getNextMessages();
-        console.log(rows, rows.length)
+        // console.log(rows, rows.length)
+        if (rows.length < 1){
+            res
+                .status(204)
+                .send();
+        }else{
+            res.send({ status: "OK", data: rows });
+        }        
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "ERROR", data: { error: error?.message || error } });
+    }
+};
+
+// Obtener los proximos banners de imagenes llamando a una stored function
+const getNextImages = async (req, res) => {
+    try {
+        const rows = await internalService.getNextImages();
+        // console.log(rows, rows.length)
         if (rows.length < 1){
             res
                 .status(204)
@@ -57,20 +76,40 @@ const getNextMessages = async (req, res) => {
 };
 
 
-const getDonationInfo = (req, res) => {
-    const donationInfo = [{ id: 1, text: "CUENTA BN 123452030-2" }, { id: 11, text: "ENVIA TU MENSAJE AL" }];
-    res.send({ status: "OK", data: donationInfo })
+const getDonationInfo = async (req, res) => {
+    try {
+        const donationInfo = await internalService.getNextDonationInfo();
+        // console.log(rows, rows.length)
+        if (donationInfo.length < 1){
+            res
+                .status(204)
+                .send();
+        }else{
+            res.send({ status: "OK", data: donationInfo });
+        }        
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "ERROR", data: { error: error?.message || error } });
+    }
 };
 
-const getAdvertisingInfo = (req, res) => {
-    const adInfo = [{ id: 1, text: "Peluquería el Piojo" }, { id: 11, text: "Restaurante Lospe" }];
-    res.send({ status: "OK", data: adInfo })
-};
-
-const getImagesInfo = (req, res) => {
-    const imgInfo = [{ id: 1, name: "00_CLUB_ACTIVO.png", path: "./images/logos/sponsors", shape: 0 },
-    { id: 101, name: "00_TELETON.png", path: "./images/logos/sponsors", shape: 1 }];
-    res.send({ status: "OK", data: imgInfo })
+const getAdvertisingInfo = async (req, res) => {
+    try {
+        const adInfo = await internalService.getNextAd();
+        // console.log(rows, rows.length)
+        if (adInfo.length < 1){
+            res
+                .status(204)
+                .send();
+        }else{
+            res.send({ status: "OK", data: adInfo });
+        }        
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "ERROR", data: { error: error?.message || error } });
+    }
 };
 
 
@@ -78,7 +117,7 @@ module.exports = {
     getNewMessages,
     getRepeatedMessages,
     getNextMessages,
+    getNextImages,
     getDonationInfo,
-    getAdvertisingInfo,
-    getImagesInfo,
+    getAdvertisingInfo,    
 };

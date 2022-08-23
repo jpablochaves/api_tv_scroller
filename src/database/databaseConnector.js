@@ -112,7 +112,7 @@ const getRepeatedMessages = async () => {
 };
 
 // Obtener mensajes a mostrar llamando un cursor
-// Este usa un stored procedure
+// Este hace un llamado a una stored function
 const getNextMessages = async () => {
     let cnx;
     try {
@@ -135,13 +135,128 @@ const getNextMessages = async () => {
     const rows = await resultSet.getRows();  // no parameter means get all rows
     await resultSet.close();  // always close the ResultSet  
     cnx.release();
-    return formatResponse(rows);
+    return formatNextMessagesResponse(rows);
 }
 
-function formatResponse(rows) {
+
+// Obtener los banners de imagenes a mostrar
+// Este hace un llamado a una stored function
+const getNextImages = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP_INTERNO.GET_NEXT_IMAGES(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextImagesResponse(rows);
+}
+
+// Obtener los banners de imagenes a mostrar
+// Este hace un llamado a una stored function
+const getNextAd = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP_INTERNO.GET_NEXT_AD(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextAdResponse(rows);
+}
+
+// Obtener los banners de imagenes a mostrar
+// Este hace un llamado a una stored function
+const getNextDonationInfo = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP_INTERNO.GET_DONATION_INFO(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextDonationResponse(rows);
+}
+
+
+
+// Formateadores de respuestas
+function formatNextMessagesResponse(rows) {
     const newObj = [];
-    rows.forEach(function (m) {
-        let obj = { "sms": m.toString().trim() }
+    rows.forEach(function (row) {
+        let obj = { "sms": row.toString().trim() };
+        newObj.push(obj);
+    });
+    return newObj
+}
+
+function formatNextImagesResponse(rows) {
+    const newObj = [];
+    rows.forEach(function (row) {
+        let [name, path, shape] = row;
+        let obj = { "name": name, "path": path, "shape": shape };
+        newObj.push(obj);
+    });
+    return newObj
+}
+
+function formatNextDonationResponse(rows) {    
+    const newObj = [];
+    rows.forEach(function (row) {
+        let [company, info] = row;
+        let obj = { "company": company, "info": info };
+        newObj.push(obj);
+    });
+    return newObj
+}
+
+function formatNextAdResponse(rows) {
+    const newObj = [];
+    rows.forEach(function (row) {
+        let [ad] = row;
+        let obj = { "ad": ad };
         newObj.push(obj);
     });
     return newObj
@@ -152,4 +267,7 @@ module.exports = {
     getNextNewMessages,
     getRepeatedMessages,
     getNextMessages,
+    getNextImages,
+    getNextAd,
+    getNextDonationInfo,
 }
