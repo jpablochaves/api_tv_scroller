@@ -7,8 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //imports
+const cintilloExternoRouter = require('./routes/externalScrollerRoutes');
 const cintilloInternoRouter = require('./routes/internalScrollerRoutes');
-
 //settings
 
 
@@ -21,6 +21,7 @@ app.use(express.json()); // para parsear las peticiones | BodyParser
 
 
 // API routes
+app.use("/teleton/tvscroller", cintilloExternoRouter);
 app.use("/teleton/internal/tvscroller", cintilloInternoRouter);
 
 

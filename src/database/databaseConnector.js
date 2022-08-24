@@ -111,9 +111,39 @@ const getRepeatedMessages = async () => {
     return Messages;
 };
 
+/*
+------------------------------------------------------------------------------
+Operaciones hacia la BD 
+------------------------------------------------------------------------------
+*/
 // Obtener mensajes a mostrar llamando un cursor
 // Este hace un llamado a una stored function
 const getNextMessages = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP.GET_NEXT_MESSAGES(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextMessagesResponse(rows);
+}
+
+const getNextMessagesInterno = async () => {
     let cnx;
     try {
         cnx = await oracledb.getConnection({
@@ -155,6 +185,31 @@ const getNextImages = async () => {
     }
 
     const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP.GET_NEXT_IMAGES(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextImagesResponse(rows);
+}
+
+const getNextImagesInterno = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
         `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP_INTERNO.GET_NEXT_IMAGES(); END;`,
         {
             cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
@@ -182,6 +237,31 @@ const getNextAd = async () => {
     }
 
     const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP.GET_NEXT_AD(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextAdResponse(rows);
+}
+
+const getNextAdInterno = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
         `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP_INTERNO.GET_NEXT_AD(); END;`,
         {
             cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
@@ -193,9 +273,35 @@ const getNextAd = async () => {
     return formatNextAdResponse(rows);
 }
 
+
 // Obtener los banners de imagenes a mostrar
 // Este hace un llamado a una stored function
 const getNextDonationInfo = async () => {
+    let cnx;
+    try {
+        cnx = await oracledb.getConnection({
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        });
+        //console.log("DB Connection Successfully!")
+    } catch (err) {
+        console.log('DB Connection error: ' + (err?.message || err))
+    }
+
+    const result = await cnx.execute(
+        `BEGIN :cursor := SMSATLANTIS.MARQUEE_APP.GET_DONATION_INFO(); END;`,
+        {
+            cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+        });
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows();  // no parameter means get all rows
+    await resultSet.close();  // always close the ResultSet  
+    cnx.release();
+    return formatNextDonationResponse(rows);
+}
+
+const getNextDonationInfoInterno = async () => {
     let cnx;
     try {
         cnx = await oracledb.getConnection({
@@ -220,8 +326,7 @@ const getNextDonationInfo = async () => {
     return formatNextDonationResponse(rows);
 }
 
-
-
+// -------------------------------------------
 // Formateadores de respuestas
 function formatNextMessagesResponse(rows) {
     const newObj = [];
@@ -267,7 +372,11 @@ module.exports = {
     getNextNewMessages,
     getRepeatedMessages,
     getNextMessages,
+    getNextMessagesInterno,
     getNextImages,
+    getNextImagesInterno,
     getNextAd,
+    getNextAdInterno,
     getNextDonationInfo,
+    getNextDonationInfoInterno, 
 }

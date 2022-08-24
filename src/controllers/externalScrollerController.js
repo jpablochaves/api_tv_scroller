@@ -1,10 +1,10 @@
 // Desde el Controller deberia de llamar al service. El service se encarga de comunicarse con la BD
-const internalService = require('../services/internalScrollerService')
+const service = require('../services/externalScrollerService')
 
 // Obtener los proximos mensajes llamando a una stored function
 const getNextMessages = async (req, res) => {
     try {
-        const rows = await internalService.getNextMessages();
+        const rows = await service.getNextMessages();
         // console.log(rows, rows.length)
         if (rows.length < 1){
             res
@@ -23,7 +23,7 @@ const getNextMessages = async (req, res) => {
 // Obtener los proximos banners de imagenes llamando a una stored function
 const getNextImages = async (req, res) => {
     try {
-        const rows = await internalService.getNextImages();
+        const rows = await service.getNextImages();
         // console.log(rows, rows.length)
         if (rows.length < 1){
             res
@@ -42,7 +42,7 @@ const getNextImages = async (req, res) => {
 
 const getDonationInfo = async (req, res) => {
     try {
-        const donationInfo = await internalService.getNextDonationInfo();
+        const donationInfo = await service.getNextDonationInfo();
         // console.log(rows, rows.length)
         if (donationInfo.length < 1){
             res
@@ -60,7 +60,7 @@ const getDonationInfo = async (req, res) => {
 
 const getAdvertisingInfo = async (req, res) => {
     try {
-        const adInfo = await internalService.getNextAd();
+        const adInfo = await service.getNextAd();
         // console.log(rows, rows.length)
         if (adInfo.length < 1){
             res
@@ -75,42 +75,6 @@ const getAdvertisingInfo = async (req, res) => {
             .send({ status: "ERROR", data: { error: error?.message || error } });
     }
 };
-
-// // Obtener los SMSs | va a retornar un promise (async)
-// const getNewMessages = async (req, res) => {
-//     try {
-//         const allSMS = await internalService.getNewMessages();
-//         if (allSMS.length < 1) {
-//             res
-//                 .status(204)
-//                 .send();
-//         } else {
-//             res.send({ status: "OK", data: allSMS });
-//         }
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "ERROR", data: { error: error?.message || error } });
-//     }
-// };
-
-// // Obtener los SMSs | va a retornar un promise (async)
-// const getRepeatedMessages = async (req, res) => {
-//     try {
-//         const allSMS = await internalService.getRepeatedMessages();
-//         if (allSMS.length < 1) {
-//             res
-//                 .status(204)
-//                 .send();
-//         } else {
-//             res.send({ status: "OK", data: allSMS });
-//         }
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "ERROR", data: { error: error?.message || error } });
-//     }
-// };
 
 
 module.exports = {
