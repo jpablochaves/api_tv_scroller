@@ -1,0 +1,9 @@
+.node_modules/
+.lenv/
+.venv/
+.idea
+.vscode
+.git
+.gitignore
+README.md
+Dockerfile
