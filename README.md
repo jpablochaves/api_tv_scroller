@@ -17,4 +17,7 @@
     > Es un add-on para node.js que permite alto desempeño en aplicaciones que usan Oracle como DBMS. Soporta funcionalidades avanzadas de Oracle DB y del CLient. Permite crear pooles de conexión
 - - - - - - -
 
-
+#### Construir la imagen
+- docker build -t tv-scroller .
+#### Crear el contenedor a partir de la imagen
+- docker run -d --name tv-scroller-api -p3000:3000 tv-scroller
