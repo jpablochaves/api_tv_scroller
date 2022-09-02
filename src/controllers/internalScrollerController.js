@@ -6,13 +6,14 @@ const getNextMessages = async (req, res) => {
     try {
         const rows = await internalService.getNextMessages();
         // console.log(rows, rows.length)
-        if (rows.length < 1){
+        if (rows.length < 1) {
             res
                 .status(204)
                 .send();
-        }else{
-            res.send({ status: "OK", data: rows });
-        }        
+        } else {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(JSON.stringify(rows));
+        }
     } catch (error) {
         res
             .status(error?.status || 500)
@@ -25,13 +26,14 @@ const getNextImages = async (req, res) => {
     try {
         const rows = await internalService.getNextImages();
         // console.log(rows, rows.length)
-        if (rows.length < 1){
+        if (rows.length < 1) {
             res
                 .status(204)
                 .send();
-        }else{
-            res.send({ status: "OK", data: rows });
-        }        
+        } else {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(JSON.stringify(rows));
+        }
     } catch (error) {
         res
             .status(error?.status || 500)
@@ -44,13 +46,14 @@ const getDonationInfo = async (req, res) => {
     try {
         const donationInfo = await internalService.getNextDonationInfo();
         // console.log(rows, rows.length)
-        if (donationInfo.length < 1){
+        if (donationInfo.length < 1) {
             res
                 .status(204)
                 .send();
-        }else{
-            res.send({ status: "OK", data: donationInfo });
-        }        
+        } else {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(JSON.stringify(donationInfo));
+        }
     } catch (error) {
         res
             .status(error?.status || 500)
@@ -62,13 +65,14 @@ const getAdvertisingInfo = async (req, res) => {
     try {
         const adInfo = await internalService.getNextAd();
         // console.log(rows, rows.length)
-        if (adInfo.length < 1){
+        if (adInfo.length < 1) {
             res
                 .status(204)
                 .send();
-        }else{
-            res.send({ status: "OK", data: adInfo });
-        }        
+        } else {
+            res.setHeader('Content-Type','application/json')
+            res.send(JSON.stringify(adInfo));
+        }
     } catch (error) {
         res
             .status(error?.status || 500)
@@ -117,5 +121,5 @@ module.exports = {
     getNextMessages,
     getNextImages,
     getDonationInfo,
-    getAdvertisingInfo,    
+    getAdvertisingInfo,
 };

@@ -11,7 +11,8 @@ const getNextMessages = async (req, res) => {
                 .status(204)
                 .send();
         }else{
-            res.send({ status: "OK", data: rows });
+            res.setHeader('Content-Type','application/json')
+            res.send(JSON.stringify(rows));
         }        
     } catch (error) {
         res
@@ -30,7 +31,8 @@ const getNextImages = async (req, res) => {
                 .status(204)
                 .send();
         }else{
-            res.send({ status: "OK", data: rows });
+            res.setHeader('Content-Type','application/json')
+            res.send(JSON.stringify(rows));
         }        
     } catch (error) {
         res
@@ -49,7 +51,8 @@ const getDonationInfo = async (req, res) => {
                 .status(204)
                 .send();
         }else{
-            res.send({ status: "OK", data: donationInfo });
+            res.setHeader('Content-Type','application/json')
+            res.send(JSON.stringify(donationInfo));
         }        
     } catch (error) {
         res
@@ -67,7 +70,8 @@ const getAdvertisingInfo = async (req, res) => {
                 .status(204)
                 .send();
         }else{
-            res.send({ status: "OK", data: adInfo });
+            res.setHeader('Content-Type','application/json')
+            res.send(JSON.stringify(adInfo));
         }        
     } catch (error) {
         res
