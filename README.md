@@ -21,3 +21,6 @@
 - docker build -t tv-scroller .
 #### Crear el contenedor a partir de la imagen
 - docker run -d --name tv-scroller-api -p3000:3000 tv-scroller
+
+#### Docker compose
+- docker compose up -d

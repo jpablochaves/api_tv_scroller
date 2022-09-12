@@ -1,6 +1,6 @@
 FROM node
 
-ARG PORT=3000
+ARG PORT=5000
 
 
 #ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_6

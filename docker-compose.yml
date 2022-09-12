@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  tv-scroller:
+    container_name: tv-scroller-api
+    build: . # En el caso de yaml de kube hay que especificar la imagen docker
+    ports:
+      - "5000:5000"
+    environment:
+      - ORACLE_HOME=/opt/oracle/instantclient_21_6
+      - PORT=5000
+      - TZ=America/Costa_Rica
