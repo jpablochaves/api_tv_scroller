@@ -18,9 +18,9 @@
 - - - - - - -
 
 #### Construir la imagen
-- docker build -t tv-scroller .
+- docker build . -t teleton/tvscrollapi
 #### Crear el contenedor a partir de la imagen
-- docker run -d --name tv-scroller-api -p3000:3000 tv-scroller
+- docker run -d --name tv-scroller-api -p5000:5000 teleton/tvscrollapi
 
 #### Docker compose
 - docker compose up -d

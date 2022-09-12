@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  tv-scroller
+  namespace: default
+  labels:
+    app: tv-scroller
+spec:
+  selector:
+    matchLabels:
+      app: tv-scroller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tv-scroller
+    spec:      
+      containers:
+      - name:  tv-scroller
+        image: jpablochaves/tvscroller-api:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi        
+        env:
+        - name: ORACLE_HOME
+          value: /opt/oracle/instantclient_21_6
+        - name: PORT
+          value: "5000"
+        - name: TZ
+          value: America/Costa_Rica
+        ports:
+        - containerPort:  5000
+          name:  tv-scroller
+      restartPolicy: Always
